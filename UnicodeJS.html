@@ -1,0 +1,63 @@
+<html>
+<body style="background-color:blue;">
+
+<script>
+
+function UnicodeXSS(){
+	
+	var resU = "String.fromCharCode(";
+	
+	var js = document.getElementById("init").value;
+	var len = js.length;
+		
+	var i = 0;
+	for(i = 0;i < len;i++){
+		resU += js.charCodeAt(i);
+		if(i <(len-1))
+			resU += ",";
+	
+	}
+	
+	resU += ")";
+	
+	return resU;
+}
+
+function _ToUnicodeJS(){
+	document.getElementById("res").value = UnicodeXSS();
+}
+
+function _ToUnicodeJS_eval(){
+
+	document.getElementById("res").value = "');eval(" + UnicodeXSS() + ")//";
+}
+
+
+function __TEST(){
+	alert(eval(document.getElementById("res").value));
+}
+
+
+
+</script>
+
+<textarea id="init" cols="200" rows="40" style="background-color:black;color:white;">alert(1)</textarea>
+<br>
+<input type="button" value="Convert To Unicode JS" style="background-color:red;color:white;" onclick="_ToUnicodeJS()">
+<input type="button" value="Convert To Unicode JS eval" style="background-color:red;color:white;" onclick="_ToUnicodeJS_eval()">
+<br><br>
+<textarea id="res" cols="200" rows="40" style="background-color:black;color:red;">
+
+</textarea>
+<br>
+<input type="button" value="TEST" style="background-color:red;color:white;" onclick="__TEST()">
+<br><br>
+
+
+
+
+
+
+
+</body>
+</html>

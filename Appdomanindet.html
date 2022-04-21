@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+<body>
+
+<script>
+
+var protocol = "http://"; var port = 80; 
+// common internal hostnames 
+var hostnames = new Array("about", "accounts", "admin", "administrator", "ads", "adserver", "adsl", "agent", "blog", "channel", "client", "dev", "dev1", "dev2", "dev3", "dev4", "dev5", "dmz", "dns", "dns0", "dns1", "dns2", "dns3", "extern", "extranet", "file", "forum", "forums", "ftp", "ftpserver", "host", "http", "https", "ida", "ids", "imail", "imap", "imap3", "imap4", "install", "intern", "internal", "intranet", "irc", "linux", "log", "mail", "map", "member", "members", "name", "nc", "ns", "ntp", "ntserver", "office", "owa", "phone", "pop", "ppp1", "pptp", "print", "printer", "project", "pub", "public", "preprod", "root", "route", "router", "server", "smtp", "sql", "sqlserver", "ssh", "telnet", "time", "voip", "w", "webaccess", "webadmin", "webmail", "webserver", "website", "win", "windows", "ww", "www", "wwww", "xml");
+
+// adds a new 'b' element that will hold 
+// the appended IFrames 
+var dom = document.createElement('b'); 
+document.body.appendChild(dom);
+
+// load an hidden IFrame pointing to 
+// the current hostname being iterated 
+function check_host(url, id)
+{ 
+	var iframe = document.createElement('iframe'); 
+	iframe.src = url; iframe.id = "i_" + id; 
+	iframe.style.visibility = "hidden"; 
+	iframe.style.display = "none"; 
+	iframe.style.width = "0px"; 
+	iframe.style.height = "0px"; 
+	iframe.onload = function(){
+		console.log('Internal DNS found: ' + this.src); 
+		//document.body.removeChild(this); 
+	}; 
+	dom.appendChild(iframe); 
+} 
+
+// iterate through the hostname array 
+for(var i=1; i < hostnames.length; i++)
+{ 
+	check_host(protocol + hostnames[i] + ":" + port, i); 
+} 
+
+// if the iframe src doesn't exists, the onerror method 
+// is not thrown, so we need to clean the DOM afterwards 
+setTimeout(
+function()
+{ 
+	for(var i=1; i < 255; i++){ 
+		var del = document.getElementById("i_" + i);
+		if(del)
+		dom.removeChild(del); 
+	} 
+	
+	}, 2000);
+
+</script>
+</body>
+
+</html>

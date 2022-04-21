@@ -1,0 +1,47 @@
+<html>
+<body style="background-color:red;">
+
+<script>
+function utf8_to_b64( str ) {
+  return window.btoa(unescape(encodeURIComponent( str )));
+}
+
+function b64_to_utf8( str ) {
+  return decodeURIComponent(escape(window.atob( str )));
+}
+
+// Usage:
+//alert(utf8_to_b64('✓ à la mode')); // "4pyTIMOgIGxhIG1vZGU="
+//alert(b64_to_utf8('4pyTIMOgIGxhIG1vZGU=')); // "✓ à la mode"
+
+function ToBase64(){
+	document.getElementById("res").value = utf8_to_b64(document.getElementById("init").value);
+	document.getElementById("ifrd").innerHTML="<iframe id=\"iframe_\" src=\"data:text/html;base64," + document.getElementById("res").value + "\"><\/iframe>";
+	//alert((b64_to_utf8(document.getElementById("res").value)));
+}
+
+function ToNormal(){
+	document.getElementById("init").value = b64_to_utf8(document.getElementById("res").value);
+
+}
+
+</script>
+
+<textarea id="init" cols="200" rows="40" style="background-color:black;color:white;"><script>alert(1)</script></textarea>
+<br>
+<input type="button" value="Convert To Base 64" style="background-color:red;color:white;" onclick="ToBase64()">
+<br><br>
+<textarea id="res" cols="200" rows="40" style="background-color:black;color:red;">
+
+</textarea>
+<br>
+<input type="button" value="Convert To origin" style="background-color:red;color:white;" onclick="ToNormal()">
+<br><br>
+
+<div id="ifrd"></div>
+<!--
+<iframe id="iframe_" src="data:text/html;base64,CjxzY3JpcHQ+YWxlcnQoMTAwMDAwMDAwKTs8L3NjcmlwdD4="></iframe>
+PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==
+-->
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+<body>
+
+<script>
+
+var target = "172.16.37.151"; 
+var port = 5900; 
+var count = 1; 
+var time = 0; 
+
+function doRequest(){
+	if(count <= 3)
+	{
+		var xhr = new XMLHttpRequest();
+		var port = 5900; 
+		xhr.open("POST", "http://" + target + ":" + port + "/" + Math.random()); 
+		var start = new Date().getTime(); 
+		xhr.send("foo"); 
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == 4) {
+				var end = new Date().getTime();
+				console.log("DONE in " + (end-start) + " ms");
+				count++; 
+				time += end-start; 
+				
+				doRequest(); 
+				
+			} 
+		} 
+		
+	}
+	else
+	{ 
+		console.log("COMPLETED. Average: " + time/3); 
+	} 
+	
+} 
+
+doRequest();
+	
+					
+</script>
+
+</body>
+</html>

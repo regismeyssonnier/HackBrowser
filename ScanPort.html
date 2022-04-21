@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+<body>
+
+<script>
+
+var scanPort= function(callback, target, port, timeout){
+	var timeout = (timeout == null)?100:timeout; 
+	var img = new Image(); 
+	
+	img.onerror = function () {
+		if (!img) 
+			return; 
+			
+		img = undefined; 
+		callback(target, port, 'open'); 
+		
+	}; 
+	
+	img.onload = img.onerror;
+
+	// note that http:// is used 
+	img.src = 'http://' + target + ':' + port; 
+	
+	setTimeout(function () {
+		if (!img) 
+			return; 
+			
+		img = undefined; 
+		callback(target, port, 'closed'); }, timeout); 
+		
+	};
+	
+	// ports_str would be something like "80,8080,8443" 
+	
+var scanTarget= function(callback, target, ports_str, timeout){
+	var ports = ports_str.split(","); 
+	for (index = 0; index < ports.length; index++) { 
+		this.scanPort(callback, target, ports[index], timeout); 
+	}; 
+	
+}
+
+var scanTargeti= function(callback, target, ports, timeout){
+	var nports = ports.length; 
+	for (index = 0; index < nports; index++) { 
+		this.scanPort(callback, target, ports[index], timeout); 
+	}; 
+	
+}
+
+function Callback(t, p, s){
+	console.log("target = " + t + ", port = ", + p + ", state = " + s);
+
+}
+
+var _port = "22,80,8080,8443";
+var _iport = [22,80,135,139,8080,8443];
+scanTarget(Callback, "192.168.1.15", _port, 30);
+scanTargeti(Callback, "192.168.1.1", _iport, 30);
+
+</script>
+
+</body>
+</html>

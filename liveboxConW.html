@@ -1,0 +1,30 @@
+<html>
+<body>
+<script>
+
+var worker = new Worker("liveboxCon.js");
+
+var data = ""
+worker.onmessage = function (oEvent) {
+	//console.log('info: ' + oEvent.data);
+	//data = oEvent.data;
+	document.getElementById("res").innerHTML = data;
+};
+
+var data = 0;
+worker.postMessage(data);
+
+/*setInterval(function Display(){
+					document.getElementById("res").innerHTML = data;
+				},
+				1000);*/
+
+//E73F 373D
+
+</script>
+
+
+
+<div id="res"></div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<html>
+<head>
+</head>
+<body>
+
+<script>
+
+var script = document.createElement("script"); 
+script.onload = function(){
+					alert('not logged in') 
+					
+				};
+
+script.onerror = function(){
+					alert('logged in'+document.cookie) 
+					
+				}; 
+				
+script.src = "https://twitter.com/account/non_existent"; 
+var head = document.getElementsByTagName("head")[0]; 
+head.appendChild(script);
+
+</script>
+
+</body>
+</html>

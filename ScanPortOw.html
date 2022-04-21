@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+<body>
+
+<script>
+
+function http_scan(start, protocol_, hostname, port_)
+{ 
+	var img_scan = new Image(); 
+	img_scan.onerror = function(evt){ 
+		var interval = (new Date).getTime() - start; 
+		if (interval < closetimeout){
+			if (process_port_http == false){ 
+				port_status_http = 1; 
+				// closed
+				console.log('Port ' + port_ + ' is CLOSED'); 
+				clearInterval(intID_http); 
+			} 
+			process_port_http = true; 
+			
+		} 
+	};
+
+	// call the same handler for both onerror and onload events 
+	img_scan.onload = img_scan.onerror; 
+	img_scan.src = protocol_ + hostname + ":" + port_; 
+	intID_http = setInterval(
+		function(){ 
+			var interval = (new Date).getTime() - start; 
+			if (interval >= opentimeout){
+				if (!img_scan) 
+					return; 
+					
+				img_scan = undefined; 
+				if (process_port_http == false){ 
+					port_status_http = 2; 
+					// open 
+					process_port_http = true; 
+				} 
+				clearInterval(intID_http); 
+				console.log('Port ' + port_ + ' is OPEN '); 
+			} 
+		} , 1); 
+		
+} 
+
+var protocol = 'http://'; 
+var hostname = "192.168.1.1";//"172.16.37.147"; 
+var process_port_http = false; 
+var port_status_http = 0; // unknown
+var opentimeout = 2500; 
+var closetimeout = 1100; 
+var ports = [22,80,5432,8080,8443,9090]; 
+for(var i=0; i<ports.length; i++){ 
+	var start = (new Date).getTime(); 
+	http_scan(start, protocol, hostname, ports[i]); 
+	
+}
+					
+					
+					
+					
+					
+					
+					
+</script>
+
+</body>
+</html>

